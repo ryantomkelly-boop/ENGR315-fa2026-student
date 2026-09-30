@@ -10,6 +10,6 @@ print("Hold for ", n,  " years")
 # calculate the eventual result
 final = principal * ((1 + (rate / 100)) ** n)
 
+print("Final Value after $",final)
 # fancy print the output with two decimal places for floating number
-print(f"Final value after is ${final:.2f}")
-
+print(f"Final value after is ${final:.5}")

@@ -1,10 +1,10 @@
 # create a new list of integers
 new_list = [2, 3, 4, 5, 6]
 
-# what is the first element?
+# what is the first element? 2
 head = new_list[0]
 
-# what is the last element?
+# what is the last element? 6
 tail = new_list[-1]
 
 # inefficient, old-style to access last element

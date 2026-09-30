@@ -1,7 +1,6 @@
 import numpy as np
-
 # Approach #1: do a manual import for the file
-path = '../../data/ekg/mitdb_201.csv'
+path = 'data/ekg/mitdb_201.csv'
 
 # open the file
 try:

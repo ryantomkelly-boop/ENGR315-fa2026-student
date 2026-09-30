@@ -20,6 +20,7 @@ def main(full_path_to_file):
     # perform a basic check to see if the file exists. If not, exit the program
     if not path.exists(full_path_to_file):
         print("File does not exist", full_path_to_file)
+        return None
 
     # load the data from the file
     data = np.loadtxt(full_path_to_file, delimiter=",")
@@ -31,16 +32,11 @@ def main(full_path_to_file):
     sampling_rate = 1000
 
     # Step 1: Establish a baseline by examining the force data the after for first ~20 points
-
-    # set an amount of time to average and find the baseline
-    baseline_length = 0 ### your code here ###
-
-    # over the baseline, determine the average signal value
-    baseline = 0 ### your code here ###
+    baseline_length = 20
+    baseline = np.mean(force_plate[:baseline_length])
 
     # Step 2: After the baseline, find the first point that rises above that value
     # given some acceptable delta
-
     # when the signal exceeds the baseline plus delta, that is the landing point
     delta = 5
 
@@ -60,15 +56,13 @@ def main(full_path_to_file):
         # if signal is rising
         if value > baseline + delta:
             # mark this index as the landing point
-
-            ### your code here ###
+            first_landing_index = index
 
             # break out of the loop to end iterating
             break
 
     # Step 3: When force measurements return to the initial baseline the user has left the plate.
     # Consider this the take off point.
-
     # when the signal falls below the baseline plus delta, that is the take off point
     delta = 5
 
@@ -79,19 +73,20 @@ def main(full_path_to_file):
     # iterate through force plate data but do not begin at the start of the array
     # being after the user has taken off. If the searching starts at the beginning again
     # then may accidentally find a point that is "too early" in the data
-
     # walk through the list but start a few moments after the at the landing index
     # since we know the take off point will be afterwards.
     for index in range(first_landing_index + 10, len(force_plate_list)):
+        # if signal is falling
+        if force_plate_list[index] < baseline + delta:
+            # mark this index as the take off point
+            take_off_index = index
 
-        ### your code here ###
-        delete_me = 0
-
+            # break out of the loop to end iterating
+            break
 
     # Step 4: The plate should remain near baseline while the user is in the air (there is no load).
     # Once it rises above the baseline again, the user has landed. Consider this the second landing.
     # This code block should be the same (functionally) as Step 2 but starting at a different point
-
     # when the signal falls above the baseline plus delta, that is the take off point
     delta = 5
 
@@ -100,32 +95,34 @@ def main(full_path_to_file):
 
     # walk through the list but start a few moment after the takeoff point
     for index in range(take_off_index + 10, len(force_plate_list)):
+        # if signal is rising
+        if force_plate_list[index] > baseline + delta:
+            # mark this index as the second landing point
+            second_landing_index = index
 
-        ### your code here ###
-        delete_me = 0
+            # break out of the loop to end iterating
+            break
 
     # Step 5: calculate the time of contact on plate and time of flight in air
-
     # calculate tc and convert to seconds using the sampling rate
-    time_of_contact = 0 ### your code here ###
+    time_of_contact = (take_off_index - first_landing_index) / sampling_rate
 
     # calculate tf and convert to seconds using the sampling rate
-    time_of_flight = 0 ### your code here ###
+    time_of_flight = (second_landing_index - take_off_index) / sampling_rate
 
     # Step 6: Calculate the Reactive Strength Index
-
     # pull the local gravitational acceleration from scipy
     g = constants.g
 
     # RSI = (g*tf^2) / (8*tc)
-    RSI = 0 ### your code here ###
+    RSI = g*time_of_flight**2 / (8*time_of_contact)
 
     ### Do not modify below this line ###
-
     # normalize the force plate data so that it will plot correctly when complete
     signal = force_plate - baseline
-
     return signal, first_landing_index, take_off_index, second_landing_index, RSI
+
+   
 
 
 if __name__ == "__main__":
@@ -144,9 +141,21 @@ if __name__ == "__main__":
     full_path_to_file = path_to_data_folder + filename
 
     # call the student function to return the signal and jump/landing indices
-    (signal, first_landing_index, take_off_index, second_landing_index, RSI) = main(full_path_to_file)
+    from pathlib import Path
+
+
+    script_dir = Path(__file__).parent.resolve()
+
+    print("Script directory:", script_dir)
+
+    
+    full_path_to_file = script_dir / "../../../data/drop-jump/force-plate/FP1.txt"
+
+    # Print the resolved absolute path
+    print("Looking for file at:", full_path_to_file.resolve())
 
     # print out some debug information
+    (signal, first_landing_index, take_off_index, second_landing_index, RSI) = main(full_path_to_file)
     print("First landing: ", first_landing_index)
     print("Take off: ", take_off_index)
     print("Second landing: ", second_landing_index)

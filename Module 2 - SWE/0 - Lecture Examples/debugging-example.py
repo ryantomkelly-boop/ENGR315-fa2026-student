@@ -32,3 +32,12 @@ if __name__ == "__main__":
             print(n, " is even")
         else:
             print(n, " is odd")
+
+ {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${fileDirname}"
+        }

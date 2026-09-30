@@ -1,4 +1,4 @@
-from primality import primality
+from primality import isprime 
 import random
 
 def generate_random_int_list(max_length, upper_bound):

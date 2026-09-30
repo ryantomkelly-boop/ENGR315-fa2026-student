@@ -21,11 +21,11 @@ def my_pi(target_error):
         t_next = t - p * ((a - a_next) ** 2)
         p_next = 2.0 * p
 
-    a = a_next
-    b = b_next
-    t = t_next
-    p = p_next
-    pi_estimate = ((a + b) ** 2) / (4 * t)
+        a = a_next
+        b = b_next
+        t = t_next
+        p = p_next
+        pi_estimate = ((a + b) ** 2) / (4 * t)
 
 
 
@@ -36,7 +36,7 @@ def my_pi(target_error):
 
 
 
-desired_error = 1E-10
+desired_error = 1E-15
 
 approximation = my_pi(desired_error)
 

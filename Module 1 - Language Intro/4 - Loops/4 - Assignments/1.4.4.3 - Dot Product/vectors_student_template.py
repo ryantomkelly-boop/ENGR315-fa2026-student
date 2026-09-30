@@ -28,7 +28,9 @@ Step 2: Iterate through the vector(s) and calculate the dot product
 dot_product = 0
 
 ### Your code here
-
+for a, b in zip(vector_a, vector_b):
+    dot_product += a * b
+dot_product = sum(a * b for a, b in zip(vector_a, vector_b))
 """
 Step 3: Calculate the error of your dot_product compared with numpy's solution
 """
